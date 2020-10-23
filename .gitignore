@@ -5,3 +5,7 @@ obj
 appsettings.json
 *.db
 .vs
+node_modules
+*.env
+.pnp
+build
