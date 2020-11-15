@@ -39,7 +39,7 @@ namespace API.Middleware
             {
                 case RestException re:
                     logger.LogError(ex, "REST ERROR");
-                    errors = re.Error;
+                    errors = re.Errors;
                     context.Response.StatusCode = (int)re.Code;
                     break;
                 case Exception e:
