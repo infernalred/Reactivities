@@ -5,8 +5,10 @@ obj
 appsettings.json
 *.db
 .vs
-.idea
+.idea.
+.idea/
 node_modules
 *.env
 .pnp
 build
+.idea/.idea.Reactivities/.idea/workspace.xml

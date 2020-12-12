@@ -29,7 +29,7 @@ namespace API
                 {
                     
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(e, "An error ocured during seed");
+                    logger.LogError(e, "An error occured during seed");
                 }
             }
 

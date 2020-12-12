@@ -49,7 +49,7 @@ namespace API.Controllers
             return await Mediator.Send(new Attend.Command {Id = id});
         }
         
-        [HttpPost("{id}/attend")]
+        [HttpDelete("{id}/attend")]
         public async Task<ActionResult<Unit>> Unattend(Guid id)
         {
             return await Mediator.Send(new Unattend.Command {Id = id});
