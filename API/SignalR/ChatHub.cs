@@ -29,7 +29,7 @@ namespace API.SignalR
 
         private string GetUsername() => Context.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        public async Task AddGroup(string groupName)
+        public async Task AddToGroup(string groupName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             var username = GetUsername();
