@@ -38,15 +38,16 @@ namespace Application.Activities
 
         public class Handler : IRequestHandler<Command>
         {
-            private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IReactivitiesRepo _repo;
+
+            public Handler(IReactivitiesRepo repo)
             {
-                _context = context;
+                _repo = repo;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id);
+                var activity = await _repo.GetActivity(request.Id);
 
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new {activity = "Not found"});
@@ -58,7 +59,7 @@ namespace Application.Activities
                 activity.City = request.City ?? activity.City;
                 activity.Venue = request.Venue ?? activity.Venue;
 
-                var success = await _context.SaveChangesAsync() > 0;
+                var success = await _repo.SaveAll();
                 
                 if (success) return Unit.Value;
 

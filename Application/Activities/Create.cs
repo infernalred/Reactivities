@@ -5,7 +5,6 @@ using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
@@ -38,12 +37,12 @@ namespace Application.Activities
 
         public class Handler : IRequestHandler<Command>
         {
-            private readonly DataContext _context;
+            private readonly IReactivitiesRepo _repo;
             private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            public Handler(IReactivitiesRepo repo, IUserAccessor userAccessor)
             {
-                _context = context;
+                _repo = repo;
                 _userAccessor = userAccessor;
             }
 
@@ -60,10 +59,9 @@ namespace Application.Activities
                     Venue = request.Venue
                 };
 
-                _context.Activities.Add(activity);
+                _repo.Add(activity);
 
-                var user = await _context.Users.SingleOrDefaultAsync(x =>
-                    x.UserName == _userAccessor.GetCurrentUserName());
+                var user = await _repo.GetUser(_userAccessor.GetCurrentUserName());
 
                 var attendee = new UserActivity
                 {
@@ -73,9 +71,9 @@ namespace Application.Activities
                     DateJoined = DateTime.Now
                 };
 
-                _context.UserActivities.Add(attendee);
+                _repo.Add(attendee);
                 
-                var success = await _context.SaveChangesAsync() > 0;
+                var success = await _repo.SaveAll();
                 
                 if (success) return Unit.Value;
 
